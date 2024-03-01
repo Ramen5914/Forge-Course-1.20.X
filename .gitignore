@@ -30,3 +30,4 @@ forge*changelog.txt
 # Custom
 .DS_Store
 /run-data/logs
+/src/generated/resources/.cache
