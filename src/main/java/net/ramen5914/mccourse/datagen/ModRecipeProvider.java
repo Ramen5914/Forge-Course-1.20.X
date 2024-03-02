@@ -11,6 +11,7 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.item.ModItems;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;

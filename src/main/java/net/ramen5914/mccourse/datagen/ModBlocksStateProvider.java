@@ -1,14 +1,17 @@
 package net.ramen5914.mccourse.datagen;
 
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
+import net.ramen5914.mccourse.block.custom.AlexandriteLampBlock;
 
 public class ModBlocksStateProvider extends BlockStateProvider {
     public ModBlocksStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
@@ -47,6 +50,22 @@ public class ModBlocksStateProvider extends BlockStateProvider {
         trapdoorBlockWithRenderType((TrapDoorBlock) ModBlocks.ALEXANDRITE_TRAPDOOR.get(), modLoc("block/alexandrite_trapdoor"), true, "cutout");
 
         blockItem(ModBlocks.ALEXANDRITE_TRAPDOOR, "_bottom");
+
+        customLamp();
+    }
+
+    private void customLamp() {
+        getVariantBuilder(ModBlocks.ALEXANDRITE_LAMP.get()).forAllStates(state -> {
+            if(state.getValue(AlexandriteLampBlock.CLICKED)) {
+                return new ConfiguredModel[]{new ConfiguredModel(models().cubeAll("alexandrite_lamp_on",
+                        new ResourceLocation(MCCourseMod.MOD_ID, "block/" + "alexandrite_lamp_on")))};
+            } else {
+                return new ConfiguredModel[]{new ConfiguredModel(models().cubeAll("alexandrite_lamp_off",
+                        new ResourceLocation(MCCourseMod.MOD_ID, "block/" +"alexandrite_lamp_off")))};
+            }
+        });
+        simpleBlockItem(ModBlocks.ALEXANDRITE_LAMP.get(), models().cubeAll("alexandrite_lamp_on",
+                new ResourceLocation(MCCourseMod.MOD_ID, "block/" +"alexandrite_lamp_on")));
     }
 
     private void blockItem(RegistryObject<Block> blockRegistryObject, String appendix) {

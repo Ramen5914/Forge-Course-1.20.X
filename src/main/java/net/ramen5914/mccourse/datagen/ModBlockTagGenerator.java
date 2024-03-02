@@ -33,7 +33,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
                 .add(ModBlocks.END_STONE_ALEXANDRITE_ORE.get())
                 .add(ModBlocks.SOUND_BLOCK.get())
                 .add(ModBlocks.ALEXANDRITE_STAIRS.get())
-                .add(ModBlocks.ALEXANDRITE_SLAB.get());
+                .add(ModBlocks.ALEXANDRITE_SLAB.get())
+                .add(ModBlocks.ALEXANDRITE_LAMP.get());
 
         this.tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(ModBlocks.ALEXANDRITE_BLOCK.get())
@@ -45,7 +46,8 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.DEEPSLATE_ALEXANDRITE_ORE.get())
                 .add(ModBlocks.END_STONE_ALEXANDRITE_ORE.get())
-                .add(ModBlocks.SOUND_BLOCK.get());
+                .add(ModBlocks.SOUND_BLOCK.get())
+                .add(ModBlocks.ALEXANDRITE_LAMP.get());
 
         this.tag(ModTags.Blocks.NEEDS_ALEXANDRITE_TOOL)
                 .add(ModBlocks.NETHER_ALEXANDRITE_ORE.get());

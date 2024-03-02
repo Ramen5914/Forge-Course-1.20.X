@@ -43,6 +43,8 @@ public class ModCreativeModeTabs {
 
                         output.accept(ModBlocks.ALEXANDRITE_DOOR.get());
                         output.accept(ModBlocks.ALEXANDRITE_TRAPDOOR.get());
+
+                        output.accept(ModBlocks.ALEXANDRITE_LAMP.get());
                     }).build());
 
     public static final RegistryObject<CreativeModeTab> TOOLS_TAB = CREATIVE_MODE_TABS.register("tools_tab",
@@ -61,6 +63,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ALEXANDRITE_CHESTPLATE.get());
                         output.accept(ModItems.ALEXANDRITE_LEGGINGS.get());
                         output.accept(ModItems.ALEXANDRITE_BOOTS.get());
+
+                        output.accept(ModItems.ALEXANDRITE_HORSE_ARMOR.get());
                     }).build());
 
 

@@ -2,6 +2,7 @@
   "values": [
     "mccourse:deepslate_alexandrite_ore",
     "mccourse:end_stone_alexandrite_ore",
-    "mccourse:sound_block"
+    "mccourse:sound_block",
+    "mccourse:alexandrite_lamp"
   ]
 }
