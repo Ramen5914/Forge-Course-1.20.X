@@ -1,12 +1,18 @@
 package net.ramen5914.mccourse.item;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.ramen5914.mccourse.MCCourseMod;
+import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.item.custom.*;
 
 public class ModItems {
@@ -66,6 +72,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> DATA_TABLET = ITEMS.register("data_tablet",
             () -> new DataTabletItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> KOHLRABI_SEEDS = ITEMS.register("kohlrabi_seeds",
+            () -> new ItemNameBlockItem(ModBlocks.KOHLRABI_CROP.get(), new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

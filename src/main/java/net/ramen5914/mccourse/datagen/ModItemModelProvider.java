@@ -43,8 +43,7 @@ public class ModItemModelProvider extends ItemModelProvider {
         handheldItem(ModItems.ALEXANDRITE_HAMMER);
 
         simpleItem(ModItems.ALEXANDRITE_HORSE_ARMOR);
-
-        simpleItem(ModItems.DATA_TABLET);
+        simpleItem(ModItems.KOHLRABI_SEEDS);
     }
 
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {

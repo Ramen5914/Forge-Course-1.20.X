@@ -64,7 +64,7 @@ public class MetalDetectorItem extends Item {
         ItemStack dataTablet = player.getInventory().getItem(InventoryUtil.getFirstInventoryIndex(player, ModItems.DATA_TABLET.get()));
 
         CompoundTag data = new CompoundTag();
-        data.putString("mccourse:found_ore", "Valuable Found: " + I18n.get(block.getDescriptionId())
+        data.putString("mccourse.found_ore", "Valuable Found: " + I18n.get(block.getDescriptionId())
                 + " at (" + below.getX() + ", " + below.getY() + ", " + below.getZ() + ")");
 
         dataTablet.setTag(data);

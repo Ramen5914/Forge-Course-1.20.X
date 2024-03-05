@@ -1,11 +1,13 @@
 package net.ramen5914.mccourse.block;
 
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.custom.AlexandriteLampBlock;
+import net.ramen5914.mccourse.block.custom.KohlrabiCropBlock;
 import net.ramen5914.mccourse.block.custom.SoundBlock;
 import net.ramen5914.mccourse.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -82,6 +84,15 @@ public class ModBlocks {
                     .mapColor(MapColor.COLOR_BLUE).sound(SoundType.GLASS)
                     .lightLevel(state -> state.getValue(AlexandriteLampBlock.CLICKED) ? 15 : 0)));
 
+    public static final RegistryObject<Block> KOHLRABI_CROP = BLOCKS.register("kohlrabi_crop",
+            () -> new KohlrabiCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)
+                    .noCollission()
+                    .noOcclusion()));
+
+    public static final RegistryObject<Block> SNAPDRAGON = registerBlock("snapdragon",
+            () -> new FlowerBlock(MobEffects.BLINDNESS, 6, BlockBehaviour.Properties.ofFullCopy(Blocks.ALLIUM)));
+    public static final RegistryObject<Block> POTTED_SNAPDRAGON = registerBlock("potted_snapdragon",
+            () -> new FlowerPotBlock((() -> (FlowerPotBlock) Blocks.FLOWER_POT), SNAPDRAGON, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ALLIUM)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
