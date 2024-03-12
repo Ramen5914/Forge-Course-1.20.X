@@ -1,0 +1,12 @@
+{
+  "type": "mccourse:gem_empowering",
+  "cookingtime": 200,
+  "group": "alexandrite",
+  "ingredient": {
+    "item": "mccourse:raw_alexandrite"
+  },
+  "result": {
+    "count": 3,
+    "item": "mccourse:alexandrite"
+  }
+}
