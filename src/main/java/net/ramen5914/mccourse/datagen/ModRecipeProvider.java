@@ -1,24 +1,22 @@
 package net.ramen5914.mccourse.datagen;
 
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.item.ModItems;
-import org.jetbrains.annotations.NotNull;
+import net.ramen5914.mccourse.recipe.builder.GemEmpoweringRecipeBuilder;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
     private static final List<ItemLike> ALEXANDRITE_SMELTABLES = List.of(
-            ModItems.RAW_ALEXANDRITE.get(),
             ModBlocks.ALEXANDRITE_ORE.get(),
             ModBlocks.DEEPSLATE_ALEXANDRITE_ORE.get(),
             ModBlocks.NETHER_ALEXANDRITE_ORE.get(),
@@ -35,12 +33,14 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .pattern("AAA")
                 .pattern("AAA")
                 .pattern("AAA")
+                .group("alexandrite")
                 .define('A', ModItems.ALEXANDRITE.get())
                 .unlockedBy("has_alexandrite", has(ModItems.ALEXANDRITE.get()))
                 .save(pRecipeOutput);
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.ALEXANDRITE.get(), 9)
                 .requires(ModBlocks.ALEXANDRITE_BLOCK.get())
+                .group("alexandrite")
                 .unlockedBy("has_alexandrite_block", has(ModBlocks.ALEXANDRITE_BLOCK.get()))
                 .save(pRecipeOutput);
 
@@ -48,13 +48,35 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         oreSmelting(pRecipeOutput, ALEXANDRITE_SMELTABLES, RecipeCategory.MISC, ModItems.ALEXANDRITE.get(), 0.25f, 200, "alexandrite");
         oreBlasting(pRecipeOutput, ALEXANDRITE_SMELTABLES, RecipeCategory.MISC, ModItems.ALEXANDRITE.get(), 0.25f, 100, "alexandrite");
 
+        SimpleCookingRecipeBuilder.smelting(Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), RecipeCategory.MISC, ModItems.ALEXANDRITE.get(), 0.25f, 200)
+                .group("alexandrite")
+                .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
+                .save(pRecipeOutput, "alexandrite_from_smelting");
+
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), RecipeCategory.MISC, ModItems.ALEXANDRITE.get(), 0.25f, 100)
+                .group("alexandrite")
+                .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
+                .save(pRecipeOutput, "alexandrite_from_blasting");
+
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModBlocks.ALEXANDRITE_BLOCK.get())
                 .requires(ModBlocks.ALEXANDRITE_SLAB.get())
                 .requires(ModBlocks.ALEXANDRITE_SLAB.get())
                 .unlockedBy("has_alexandrite_slab", has(ModBlocks.ALEXANDRITE_SLAB.get()))
                 .save(pRecipeOutput, "mccourse:alexandrite_block_from_slabs");
 
-        slab(pRecipeOutput, RecipeCategory.MISC, ModBlocks.ALEXANDRITE_SLAB.get(), ModBlocks.ALEXANDRITE_BLOCK.get());
+//        slab(pRecipeOutput, RecipeCategory.MISC, ModBlocks.ALEXANDRITE_SLAB.get(), ModBlocks.ALEXANDRITE_BLOCK.get());
+//
+//        GemEmpoweringRecipeBuilder.gemEmpowering(RecipeCategory.MISC, Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), new ItemStack(ModItems.ALEXANDRITE.get(), 3), 200)
+//                .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
+//                .group("alexandrite")
+////                .save(pRecipeOutput, "mccourse:alexandrite_from_raw_alexandrite");
+//                .save(pRecipeOutput);
+
+        GemEmpoweringRecipeBuilder.gemEmpowering(Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), new ItemStack(ModItems.ALEXANDRITE.get(), 3), 200)
+                .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
+                .group("alexandrite")
+//                .save(pRecipeOutput, "mccourse:alexandrite_from_raw_alexandrite");
+                .save(pRecipeOutput, "mccourse:alexandrite_from_gem_empowering");
     }
 
     protected static void customNineBlockStorageRecipes(RecipeOutput pRecipeOutput, RecipeCategory pUnpackedCategory, ItemLike pUnpacked, RecipeCategory pPackedCategory, ItemLike pPacked, String pPackedName, @Nullable String pPackedGroup, String pUnpackedName, @Nullable String pUnpackedGroup) {

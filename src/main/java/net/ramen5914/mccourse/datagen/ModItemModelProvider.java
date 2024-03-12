@@ -44,6 +44,19 @@ public class ModItemModelProvider extends ItemModelProvider {
 
         simpleItem(ModItems.ALEXANDRITE_HORSE_ARMOR);
         simpleItem(ModItems.KOHLRABI_SEEDS);
+
+        simpleBlockItem(ModBlocks.SNAPDRAGON);
+
+        simpleItem(ModItems.BAR_BRAWL_RECORD);
+
+        complexBlock(ModBlocks.GEM_EMPOWERING_STATION.get());
+
+        simpleItem(ModItems.SOAP_WATER_BUCKET);
+    }
+
+    private ItemModelBuilder complexBlock(Block block) {
+        return withExistingParent(ForgeRegistries.BLOCKS.getKey(block).getPath(), new ResourceLocation(MCCourseMod.MOD_ID,
+                "block/" + ForgeRegistries.BLOCKS.getKey(block).getPath()));
     }
 
     private ItemModelBuilder handheldItem(RegistryObject<Item> item) {

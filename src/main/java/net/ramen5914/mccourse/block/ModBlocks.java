@@ -1,5 +1,6 @@
 package net.ramen5914.mccourse.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.*;
@@ -7,8 +8,10 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.custom.AlexandriteLampBlock;
+import net.ramen5914.mccourse.block.custom.GemEmpoweringStationBlock;
 import net.ramen5914.mccourse.block.custom.KohlrabiCropBlock;
 import net.ramen5914.mccourse.block.custom.SoundBlock;
+import net.ramen5914.mccourse.fluid.ModFluids;
 import net.ramen5914.mccourse.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -20,6 +23,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.ramen5914.mccourse.sound.ModSounds;
 
 import java.util.function.Supplier;
 
@@ -81,8 +85,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> ALEXANDRITE_LAMP = registerBlock("alexandrite_lamp",
             () -> new AlexandriteLampBlock(BlockBehaviour.Properties.of()
-                    .mapColor(MapColor.COLOR_BLUE).sound(SoundType.GLASS)
-                    .lightLevel(state -> state.getValue(AlexandriteLampBlock.CLICKED) ? 15 : 0)));
+                    .mapColor(MapColor.COLOR_BLUE).sound(ModSounds.ALEXANDRITE_LAMP_SOUNDS)
+                    .lightLevel(state -> state.getValue(AlexandriteLampBlock.CLICKED) ? 15 : 0)
+                    .strength(1f)));
 
     public static final RegistryObject<Block> KOHLRABI_CROP = BLOCKS.register("kohlrabi_crop",
             () -> new KohlrabiCropBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.WHEAT)
@@ -93,6 +98,13 @@ public class ModBlocks {
             () -> new FlowerBlock(MobEffects.BLINDNESS, 6, BlockBehaviour.Properties.ofFullCopy(Blocks.ALLIUM)));
     public static final RegistryObject<Block> POTTED_SNAPDRAGON = registerBlock("potted_snapdragon",
             () -> new FlowerPotBlock((() -> (FlowerPotBlock) Blocks.FLOWER_POT), SNAPDRAGON, BlockBehaviour.Properties.ofFullCopy(Blocks.POTTED_ALLIUM)));
+
+    public static final RegistryObject<Block> GEM_EMPOWERING_STATION = registerBlock("gem_empowering_station",
+            () -> new GemEmpoweringStationBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
+                    .noOcclusion()));
+
+    public static final RegistryObject<LiquidBlock> SOAP_WATER_BLOCK = BLOCKS.register("soap_water_block",
+            () -> new LiquidBlock(ModFluids.SOURCE_SOAP_WATER, BlockBehaviour.Properties.ofFullCopy(Blocks.WATER).noLootTable()));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
