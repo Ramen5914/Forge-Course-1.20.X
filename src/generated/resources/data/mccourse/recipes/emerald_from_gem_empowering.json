@@ -1,0 +1,10 @@
+{
+  "type": "mccourse:gem_empowering",
+  "cookingtime": 500,
+  "ingredient": {
+    "item": "minecraft:green_dye"
+  },
+  "result": {
+    "item": "minecraft:emerald"
+  }
+}

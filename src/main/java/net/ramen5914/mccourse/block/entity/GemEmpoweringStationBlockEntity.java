@@ -13,7 +13,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -58,7 +58,7 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
 
     protected final ContainerData data;
     private int progress = 0;
-    private int maxProgress = 78;
+    private int maxProgress;
 
     public GemEmpoweringStationBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.GEM_EMPOWERING_STATION_BE.get(), pPos, pBlockState);
@@ -141,7 +141,6 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
         super.load(pTag);
         itemHandler.deserializeNBT(pTag.getCompound("inventory"));
         progress = pTag.getInt("gem_empowering_station.progress");
-
     }
 
     public void tick(Level level, BlockPos pPos, BlockState pState) {
@@ -159,8 +158,8 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
     }
 
     private void craftItem() {
-        Optional<GemEmpoweringRecipe> recipe = getCurrentRecipe();
-        ItemStack resultItem = recipe.get().getResultItem(getLevel().registryAccess());
+        Optional<RecipeHolder<GemEmpoweringRecipe>> recipe = getCurrentRecipe();
+        ItemStack resultItem = recipe.get().value().getResultItem(getLevel().registryAccess());
 
         this.itemHandler.extractItem(INPUT_SLOT, 1, false);
 
@@ -181,29 +180,27 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
     }
 
     private boolean hasRecipe() {
-        Optional<GemEmpoweringRecipe> recipe = getCurrentRecipe();
+        Optional<RecipeHolder<GemEmpoweringRecipe>> recipe = getCurrentRecipe();
 
         if (recipe.isEmpty()) {
             return false;
         }
-        ItemStack resultItem = recipe.get().getResultItem(getLevel().registryAccess());
+
+        ItemStack resultItem = recipe.get().value().getResultItem(getLevel().registryAccess());
+
+        this.maxProgress = recipe.get().value().getCookingTime();
 
         return canInsertAmountIntoOutputSlot(resultItem.getCount())
                 && canInsertItemIntoOutputSlot(resultItem.getItem());
     }
 
-    private Optional<GemEmpoweringRecipe> getCurrentRecipe() {
-        RecipeManager recipeManager = this.level.getRecipeManager();
+    private Optional<RecipeHolder<GemEmpoweringRecipe>> getCurrentRecipe() {
         SimpleContainer inventory = new SimpleContainer(this.itemHandler.getSlots());
         for(int i = 0; i < this.itemHandler.getSlots(); i++) {
             inventory.setItem(i, this.itemHandler.getStackInSlot(i));
         }
 
-        GemEmpoweringRecipe recipe = recipeManager.getRecipesFor(ModRecipeTypes.GEM_EMPOWERING.get(), inventory, this.level).stream().filter((p_296918_) -> {
-            return p_296918_.value().matches(inventory, this.level);
-        }).findFirst().get().value();
-
-        return Optional.of(recipe);
+        return this.level.getRecipeManager().getRecipeFor(ModRecipeTypes.GEM_EMPOWERING.get(), inventory, level);
     }
 
     private boolean canInsertItemIntoOutputSlot(Item item) {

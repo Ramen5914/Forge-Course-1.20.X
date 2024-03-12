@@ -1,0 +1,11 @@
+{
+  "type": "mccourse:gem_empowering",
+  "cookingtime": 100,
+  "ingredient": {
+    "item": "minecraft:stick"
+  },
+  "result": {
+    "count": 7,
+    "item": "minecraft:blaze_rod"
+  }
+}

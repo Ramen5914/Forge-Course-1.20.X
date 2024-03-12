@@ -2,7 +2,6 @@ package net.ramen5914.mccourse.block.custom;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -14,7 +13,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -28,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class GemEmpoweringStationBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final MapCodec<GemEmpoweringStationBlock> CODEC = simpleCodec(GemEmpoweringStationBlock::new);
 
     public GemEmpoweringStationBlock(Properties pProperties) {
         super(pProperties);
@@ -35,7 +34,7 @@ public class GemEmpoweringStationBlock extends BaseEntityBlock {
 
     @Override
     protected MapCodec<? extends BaseEntityBlock> codec() {
-        return null;
+        return CODEC;
     }
 
     public static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 12, 16);

@@ -4,6 +4,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
@@ -11,6 +12,7 @@ import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.item.ModItems;
 import net.ramen5914.mccourse.recipe.builder.GemEmpoweringRecipeBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -64,19 +66,20 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy("has_alexandrite_slab", has(ModBlocks.ALEXANDRITE_SLAB.get()))
                 .save(pRecipeOutput, "mccourse:alexandrite_block_from_slabs");
 
-//        slab(pRecipeOutput, RecipeCategory.MISC, ModBlocks.ALEXANDRITE_SLAB.get(), ModBlocks.ALEXANDRITE_BLOCK.get());
-//
-//        GemEmpoweringRecipeBuilder.gemEmpowering(RecipeCategory.MISC, Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), new ItemStack(ModItems.ALEXANDRITE.get(), 3), 200)
-//                .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
-//                .group("alexandrite")
-////                .save(pRecipeOutput, "mccourse:alexandrite_from_raw_alexandrite");
-//                .save(pRecipeOutput);
+        slab(pRecipeOutput, RecipeCategory.MISC, ModBlocks.ALEXANDRITE_SLAB.get(), ModBlocks.ALEXANDRITE_BLOCK.get());
 
         GemEmpoweringRecipeBuilder.gemEmpowering(Ingredient.of(ModItems.RAW_ALEXANDRITE.get()), new ItemStack(ModItems.ALEXANDRITE.get(), 3), 200)
                 .unlockedBy("has_raw_alexandrite", has(ModItems.RAW_ALEXANDRITE.get()))
                 .group("alexandrite")
-//                .save(pRecipeOutput, "mccourse:alexandrite_from_raw_alexandrite");
-                .save(pRecipeOutput, "mccourse:alexandrite_from_gem_empowering");
+                .save(pRecipeOutput, "alexandrite_from_gem_empowering");
+
+        GemEmpoweringRecipeBuilder.gemEmpowering(Ingredient.of(Items.STICK), new ItemStack(Items.BLAZE_ROD, 7), 100)
+                .unlockedBy("has_stick", has(Items.STICK))
+                .save(pRecipeOutput, "blaze_rod_from_gem_empowering");
+
+        GemEmpoweringRecipeBuilder.gemEmpowering(Ingredient.of(Items.GREEN_DYE), Items.EMERALD, 500)
+                .unlockedBy("has_emerald", has(Items.EMERALD))
+                .save(pRecipeOutput, "emerald_from_gem_empowering");
     }
 
     protected static void customNineBlockStorageRecipes(RecipeOutput pRecipeOutput, RecipeCategory pUnpackedCategory, ItemLike pUnpacked, RecipeCategory pPackedCategory, ItemLike pPacked, String pPackedName, @Nullable String pPackedGroup, String pUnpackedName, @Nullable String pUnpackedGroup) {
@@ -84,11 +87,11 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         ShapedRecipeBuilder.shaped(pPackedCategory, pPacked).define('#', pUnpacked).pattern("###").pattern("###").pattern("###").group(pPackedGroup).unlockedBy(getHasName(pUnpacked), has(pUnpacked)).save(pRecipeOutput, new ResourceLocation(pPackedName));
     }
 
-    protected static void oreSmelting(RecipeOutput pRecipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    protected static void oreSmelting(@NotNull RecipeOutput pRecipeOutput, List<ItemLike> pIngredients, @NotNull RecipeCategory pCategory, @NotNull ItemLike pResult, float pExperience, int pCookingTime, @NotNull String pGroup) {
         oreCooking(pRecipeOutput, RecipeSerializer.SMELTING_RECIPE, SmeltingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_smelting");
     }
 
-    protected static void oreBlasting(RecipeOutput pRecipeOutput, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    protected static void oreBlasting(@NotNull RecipeOutput pRecipeOutput, List<ItemLike> pIngredients, @NotNull RecipeCategory pCategory, @NotNull ItemLike pResult, float pExperience, int pCookingTime, @NotNull String pGroup) {
         oreCooking(pRecipeOutput, RecipeSerializer.BLASTING_RECIPE, BlastingRecipe::new, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
     }
 

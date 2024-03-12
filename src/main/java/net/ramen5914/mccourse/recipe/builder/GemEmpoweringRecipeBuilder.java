@@ -12,7 +12,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
+import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.recipe.GemEmpoweringRecipe;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
@@ -22,13 +24,12 @@ import java.util.Objects;
 public class GemEmpoweringRecipeBuilder implements RecipeBuilder {
     private final Item result;
     @Nullable
-    private final int count;
+    private final Integer count;
     private final Ingredient ingredient;
     private final int cookingTime;
     private final Map<String, Criterion<?>> criteria = new LinkedHashMap<>();
     @Nullable
     private String group;
-//    private final AbstractCookingRecipe.Factory<?> factory;
 
     private GemEmpoweringRecipeBuilder(ItemStack pResult, Ingredient pIngredient, int pCookingTime) {
         this.result = pResult.getItem();
@@ -45,37 +46,36 @@ public class GemEmpoweringRecipeBuilder implements RecipeBuilder {
         return new GemEmpoweringRecipeBuilder(new ItemStack(pResult), pIngredient, pCookingTime);
     }
 
-    public GemEmpoweringRecipeBuilder unlockedBy(String pName, Criterion<?> pCriterion) {
+    public @NotNull GemEmpoweringRecipeBuilder unlockedBy(@NotNull String pName, @NotNull Criterion<?> pCriterion) {
         this.criteria.put(pName, pCriterion);
         return this;
     }
 
-    public GemEmpoweringRecipeBuilder group(@Nullable String pGroupName) {
+    public @NotNull GemEmpoweringRecipeBuilder group(@Nullable String pGroupName) {
         this.group = pGroupName;
         return this;
     }
 
-    public Item getResult() {
+    public @NotNull Item getResult() {
         return this.result;
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput) {
+    public void save(@NotNull RecipeOutput pRecipeOutput) {
         RecipeBuilder.super.save(pRecipeOutput);
     }
 
     @Override
-    public void save(RecipeOutput pRecipeOutput, String pId) {
-        save(pRecipeOutput, new ResourceLocation(pId));
+    public void save(@NotNull RecipeOutput pRecipeOutput, @NotNull String pId) {
+        save(pRecipeOutput, new ResourceLocation(MCCourseMod.MOD_ID, pId));
     }
 
-    public void save(RecipeOutput pRecipeOutput, ResourceLocation pId) {
+    public void save(RecipeOutput pRecipeOutput, @NotNull ResourceLocation pId) {
         this.ensureValid(pId);
         Advancement.Builder advancementBuilder = pRecipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId)).rewards(Builder.recipe(pId)).requirements(Strategy.OR);
         Objects.requireNonNull(advancementBuilder);
         this.criteria.forEach(advancementBuilder::addCriterion);
         GemEmpoweringRecipe recipe = new GemEmpoweringRecipe(Objects.requireNonNullElse(this.group, ""), this.ingredient, new ItemStack(this.result, this.count), this.cookingTime);
-//        GemEmpoweringRecipe $$3 = this.factory.create((String) Objects.requireNonNullElse(this.group, ""), this.ingredient, new ItemStack(this.result), this.cookingTime);
         pRecipeOutput.accept(pId, recipe, advancementBuilder.build(pId.withPrefix("recipes/gem_empowering/")));
     }
 
