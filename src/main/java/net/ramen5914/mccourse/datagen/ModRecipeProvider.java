@@ -98,7 +98,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
     protected static <T extends AbstractCookingRecipe> void oreCooking(RecipeOutput pRecipeOutput, RecipeSerializer<T> pRecipeSerializer, AbstractCookingRecipe.Factory<T> pRecipeType, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup, String pFileEnding) {
         for(ItemLike itemlike : pIngredients) {
             SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), pCategory, pResult, pExperience, pCookingTime, pRecipeSerializer, pRecipeType).group(pGroup).unlockedBy(getHasName(itemlike), has(itemlike))
-                    .save(pRecipeOutput, MCCourseMod.MOD_ID + ":" + (pResult) + pFileEnding + "_" + getItemName(itemlike));
+                    .save(pRecipeOutput, (pResult) + pFileEnding + "_" + getItemName(itemlike));
         }
     }
 }
