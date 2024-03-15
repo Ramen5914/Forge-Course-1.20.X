@@ -109,7 +109,7 @@ public class GemEmpoweringStationBlock extends BaseEntityBlock {
             return null;
         }
 
-        return createTickerHelper(pBlockEntityType, ModBlockEntities.GEM_EMPOWERING_STATION_BE.get(),
+        return createTickerHelper(pBlockEntityType, ModBlockEntities.GEM_EMPOWERING_STATION_BE_TYPE.get(),
                 (pLevel1, pPos, pState1, pBlockEntity) -> pBlockEntity.tick(pLevel1, pPos, pState1));
     }
 }

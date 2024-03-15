@@ -1,14 +1,17 @@
 package net.ramen5914.mccourse.screen;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.block.entity.GemEmpoweringStationBlockEntity;
 
@@ -24,19 +27,26 @@ public class GemEmpoweringStationMenu extends AbstractContainerMenu {
     public GemEmpoweringStationMenu(int pContainerId, Inventory inv, BlockEntity entity, ContainerData data) {
         super(ModMenuTypes.GEM_EMPOWERING_MENU.get(), pContainerId);
         checkContainerSize(inv, 4);
-        blockEntity = ((GemEmpoweringStationBlockEntity) entity);
+        this.blockEntity = ((GemEmpoweringStationBlockEntity) entity);
         this.level = inv.player.level();
         this.data = data;
 
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
-            this.addSlot(new SlotItemHandler(iItemHandler, 0, 80, 11));
-            this.addSlot(new SlotItemHandler(iItemHandler, 1, 26, 59));
-            this.addSlot(new SlotItemHandler(iItemHandler, 2, 80, 59));
-            this.addSlot(new SlotItemHandler(iItemHandler, 3, 134, 59));
-        });
+        IItemHandler testItemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState(), this.blockEntity, Direction.NORTH);
+        if (testItemHandler != null) {
+            int[][] slotPositions = {
+                    {80, 11},
+                    {26, 59},
+                    {80, 59},
+                    {134, 59},
+            };
+
+            for (int i = 0; i < slotPositions.length; i++) {
+                this.addSlot(new SlotItemHandler(testItemHandler, i, slotPositions[i][0], slotPositions[i][1]));
+            }
+        }
 
         addDataSlots(data);
     }
@@ -51,6 +61,18 @@ public class GemEmpoweringStationMenu extends AbstractContainerMenu {
         int progressArrowSize = 26;
 
         return maxProgress != 0 && progress != 0 ? progress * progressArrowSize / maxProgress : 0;
+    }
+
+    public float getEmpoweringProgress() {
+        int progress = this.data.get(0);
+        int maxProgress = this.data.get(1);
+        return maxProgress != 0 && progress != 0 ? ((float) progress) / maxProgress : 0;
+    }
+
+    public float getEnergyLevel() {
+        int energy = this.blockEntity.getEnergyStorage().getEnergyStored();
+        int maxEnergy = this.blockEntity.getEnergyStorage().getMaxEnergyStored();
+        return Mth.clamp((float) energy / maxEnergy, 0f, 1f);
     }
 
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons

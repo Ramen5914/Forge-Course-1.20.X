@@ -75,7 +75,7 @@ public class GemEmpoweringRecipeBuilder implements RecipeBuilder {
         Advancement.Builder advancementBuilder = pRecipeOutput.advancement().addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(pId)).rewards(Builder.recipe(pId)).requirements(Strategy.OR);
         Objects.requireNonNull(advancementBuilder);
         this.criteria.forEach(advancementBuilder::addCriterion);
-        GemEmpoweringRecipe recipe = new GemEmpoweringRecipe(Objects.requireNonNullElse(this.group, ""), this.ingredient, new ItemStack(this.result, this.count), this.cookingTime);
+        GemEmpoweringRecipe recipe = new GemEmpoweringRecipe(Objects.requireNonNullElse(this.group, ""), this.ingredient, new ItemStack(this.result, Objects.requireNonNullElse(this.count, 1)), this.cookingTime);
         pRecipeOutput.accept(pId, recipe, advancementBuilder.build(pId.withPrefix("recipes/gem_empowering/")));
     }
 

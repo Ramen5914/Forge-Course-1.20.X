@@ -1,9 +1,10 @@
 package net.ramen5914.mccourse.event;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.particle.AlexandriteParticles;
 import net.ramen5914.mccourse.particle.ModParticles;

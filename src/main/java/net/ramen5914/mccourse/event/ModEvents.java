@@ -11,22 +11,27 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.trading.MerchantOffer;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.BlockEvent;
-import net.minecraftforge.event.village.VillagerTradesEvent;
-import net.minecraftforge.event.village.WandererTradesEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.server.command.ConfigCommand;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.village.VillagerTradesEvent;
+import net.neoforged.neoforge.event.village.WandererTradesEvent;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.server.command.ConfigCommand;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
+import net.ramen5914.mccourse.block.entity.ModBlockEntities;
 import net.ramen5914.mccourse.command.ReturnHomeCommand;
 import net.ramen5914.mccourse.command.SetHomeCommand;
 import net.ramen5914.mccourse.item.ModItems;
 import net.ramen5914.mccourse.item.custom.HammerItem;
 import net.ramen5914.mccourse.villager.ModVillagers;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -139,5 +144,29 @@ public class ModEvents {
                 new ItemStack(Items.EMERALD, 5),
                 new ItemStack(ModItems.KOHLRABI_SEEDS.get()), 3, 2, 0.02f
         ));
+    }
+
+    @SubscribeEvent
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                ModBlockEntities.GEM_EMPOWERING_STATION_BE_TYPE.get(),
+                (be, side) -> new ItemStackHandler(4) {
+                    @Override
+                    protected void onContentsChanged(int slot) {
+                        be.setChanged();
+                    }
+
+                    @Override
+                    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                        return switch (slot) {
+                            case 0, 1 -> true;
+                            case 2 -> false;
+                            case 3 -> stack.getItem() == ModItems.KOHLRABI.get();
+                            default -> super.isItemValid(slot, stack);
+                        };
+                    }
+                }
+        );
     }
 }

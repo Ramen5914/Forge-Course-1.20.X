@@ -5,7 +5,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -14,7 +13,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,10 +24,10 @@ public class GemEmpoweringRecipe implements Recipe<SimpleContainer> {
     public final ItemStack result;
     private final int cookingTime;
 
-    public GemEmpoweringRecipe(String group, Ingredient ingredient, ItemStack result, int cookingTime) {
-        this.group = group;
-        this.ingredient = ingredient;
-        this.result = result;
+    public GemEmpoweringRecipe(String pGroup, Ingredient pIngredient, ItemStack pResult, int cookingTime) {
+        this.group = pGroup;
+        this.ingredient = pIngredient;
+        this.result = pResult;
         this.cookingTime = cookingTime;
     }
 
@@ -89,20 +87,21 @@ public class GemEmpoweringRecipe implements Recipe<SimpleContainer> {
         return this.ingredient;
     }
 
-    public ItemStack getResult() {
+    public ItemStack getResultItem() {
         return this.result;
     }
 
     public static class Serializer implements RecipeSerializer<GemEmpoweringRecipe> {
         public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID =
-                new ResourceLocation(MCCourseMod.MOD_ID,"gem_empowering");
+//        public static final ResourceLocation ID =
+//                new ResourceLocation(MCCourseMod.MOD_ID,"gem_empowering");
 
         public static final Codec<GemEmpoweringRecipe> CODEC = RecordCodecBuilder.create(builder -> builder
                 .group(
                         ExtraCodecs.strictOptionalField(Codec.STRING, "group", "").forGetter(GemEmpoweringRecipe::getGroup),
                         Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(GemEmpoweringRecipe::getIngredient),
-                        ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(GemEmpoweringRecipe::getResult),
+                        ItemStack.ITEM_WITH_COUNT_CODEC.fieldOf("result").forGetter(GemEmpoweringRecipe::getResultItem),
+                        // Vanilla uses "cookingtime" even thought I'd rather use "cooking_time". Whatever ig
                         Codec.INT.fieldOf("cookingtime").orElse(100).forGetter(GemEmpoweringRecipe::getCookingTime)
                 )
                 .apply(builder, GemEmpoweringRecipe::new));
@@ -111,7 +110,7 @@ public class GemEmpoweringRecipe implements Recipe<SimpleContainer> {
 
         }
 
-        public Codec<GemEmpoweringRecipe> codec() {
+        public @NotNull Codec<GemEmpoweringRecipe> codec() {
             return CODEC;
         }
 

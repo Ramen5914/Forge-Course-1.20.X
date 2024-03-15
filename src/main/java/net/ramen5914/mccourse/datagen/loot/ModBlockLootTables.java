@@ -4,10 +4,9 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.block.custom.KohlrabiCropBlock;
 import net.ramen5914.mccourse.item.ModItems;
@@ -64,6 +63,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
+//        return ModBlocks.BLOCKS.getEntries().stream().map()::iterator;
+        return ModBlocks.BLOCKS.getEntries().stream().map(
+                blockDeferredHolder -> ((DeferredBlock<Block>) blockDeferredHolder).get())::iterator;
     }
 }
