@@ -31,3 +31,5 @@ forge*changelog.txt
 .DS_Store
 /run-data/logs
 /src/generated/resources/.cache
+/runs/client/logs
+/runs/client/logs
