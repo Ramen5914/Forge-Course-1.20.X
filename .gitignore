@@ -32,3 +32,5 @@ forge*changelog.txt
 /src/generated/resources/.cache
 /runs/client/logs
 /runs/data/logs
+runs/client/usernamecache.json
+runs/client/usercache.json
