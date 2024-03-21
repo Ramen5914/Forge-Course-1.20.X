@@ -22,7 +22,6 @@ build
 
 # other
 eclipse
-run
 
 # Files from Forge MDK
 forge*changelog.txt
@@ -30,9 +29,5 @@ forge*changelog.txt
 # Custom
 .DS_Store
 /src/generated/resources/.cache
-/runs/client/logs
-/runs/data/logs
-runs/client/usernamecache.json
-runs/client/usercache.json
-runs/client/command_history.txt
-/runs/client/crash-reports
+/runs/
+/run/
