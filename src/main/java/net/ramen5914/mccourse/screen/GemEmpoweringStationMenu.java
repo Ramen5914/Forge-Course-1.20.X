@@ -34,7 +34,7 @@ public class GemEmpoweringStationMenu extends AbstractContainerMenu {
         addPlayerInventory(inv);
         addPlayerHotbar(inv);
 
-        IItemHandler testItemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState(), this.blockEntity, Direction.NORTH);
+        IItemHandler testItemHandler = this.level.getCapability(Capabilities.ItemHandler.BLOCK, this.blockEntity.getBlockPos(), this.blockEntity.getBlockState(), this.blockEntity, Direction.DOWN);
         if (testItemHandler != null) {
             int[][] slotPositions = {
                     {80, 11},
