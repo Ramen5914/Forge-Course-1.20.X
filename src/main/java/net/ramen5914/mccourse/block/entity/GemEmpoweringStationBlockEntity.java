@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -18,30 +18,24 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.common.CommonHooks;
-import net.neoforged.neoforge.common.util.Lazy;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.item.ModItems;
 import net.ramen5914.mccourse.recipe.GemEmpoweringRecipe;
 import net.ramen5914.mccourse.recipe.ModRecipeTypes;
 import net.ramen5914.mccourse.screen.GemEmpoweringStationMenu;
-import net.ramen5914.mccourse.util.InventoryDirectionEntry;
-import net.ramen5914.mccourse.util.InventoryDirectionWrapper;
 import net.ramen5914.mccourse.util.ModEnergyStorage;
-import net.ramen5914.mccourse.util.WrappedHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Optional;
 
-public class GemEmpoweringStationBlockEntity extends BlockEntity implements MenuProvider, WorldlyContainer {
+public class GemEmpoweringStationBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer{
     public ItemStackHandler getItemHandler() {
         return itemHandler;
     }
@@ -69,14 +63,14 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
     private static final int OUTPUT_SLOT = 2;
     private static final int ENERGY_ITEM_SLOT = 3;
 
-    private final Map<Direction, Lazy<WrappedHandler>> directionWrappedHandlerMap =
-            new InventoryDirectionWrapper(itemHandler,
-                    new InventoryDirectionEntry(Direction.DOWN, OUTPUT_SLOT, false),
-                    new InventoryDirectionEntry(Direction.NORTH, INPUT_SLOT, true),
-                    new InventoryDirectionEntry(Direction.SOUTH, OUTPUT_SLOT, false),
-                    new InventoryDirectionEntry(Direction.EAST, OUTPUT_SLOT, false),
-                    new InventoryDirectionEntry(Direction.WEST, INPUT_SLOT, true),
-                    new InventoryDirectionEntry(Direction.UP, INPUT_SLOT, true)).directionsMap;
+//    private final Map<Direction, Lazy<WrappedHandler>> directionWrappedHandlerMap =
+//            new InventoryDirectionWrapper(itemHandler,
+//                    new InventoryDirectionEntry(Direction.DOWN, OUTPUT_SLOT, false),
+//                    new InventoryDirectionEntry(Direction.NORTH, INPUT_SLOT, true),
+//                    new InventoryDirectionEntry(Direction.SOUTH, OUTPUT_SLOT, false),
+//                    new InventoryDirectionEntry(Direction.EAST, OUTPUT_SLOT, false),
+//                    new InventoryDirectionEntry(Direction.WEST, INPUT_SLOT, true),
+//                    new InventoryDirectionEntry(Direction.UP, INPUT_SLOT, true)).directionsMap;
 
     protected final ContainerData data;
     private int progress = 0;
@@ -140,10 +134,20 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
         return Component.literal("Gem Empowering Station");
     }
 
+    @Override
+    protected Component getDefaultName() {
+        return null;
+    }
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int pContainerId, Inventory pPlayerInventory, Player pPlayer) {
         return new GemEmpoweringStationMenu(pContainerId, pPlayerInventory, this, this.data);
+    }
+
+    @Override
+    protected AbstractContainerMenu createMenu(int i, Inventory inventory) {
+        return null;
     }
 
 
@@ -331,23 +335,41 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
 
     @Override
     public boolean canPlaceItemThroughFace(int pIndex, ItemStack pStack, @Nullable Direction pDirection) {
-        if (pIndex == 2) {
-            return false;
-        } else if (pIndex != 1) {
-            return true;
-        } else {
-            ItemStack itemstack = (ItemStack) this.items.get(1);
-            return CommonHooks.getBurnTime(pStack, this.recipeType) > 0 || pStack.is(Items.BUCKET) && !itemstack.is(Items.BUCKET);
+        MCCourseMod.LOGGER.info(pStack.toString());
+        MCCourseMod.LOGGER.info(String.valueOf(pIndex));
+
+        if (pDirection != null) {
+            MCCourseMod.LOGGER.info(pDirection.toString());
         }
+
+//        if (pIndex == 2) {
+//            return false;
+//        } else if (pIndex != 1) {
+//            return true;
+//        } else {
+//            MCCourseMod.LOGGER.info(pStack.toString());
+//            MCCourseMod.LOGGER.info(String.valueOf(pIndex));
+//            MCCourseMod.LOGGER.info(pDirection.toString());
+////            ItemStack itemstack = (ItemStack) this.items.get(1);
+////            return CommonHooks.getBurnTime(pStack, this.recipeType) > 0 || pStack.is(Items.BUCKET) && !itemstack.is(Items.BUCKET);
+//        }
+
+        return false;
     }
 
     @Override
     public boolean canTakeItemThroughFace(int pIndex, ItemStack pStack, Direction pDirection) {
-        if (pDirection == Direction.DOWN && pIndex == 1) {
-            return pStack.is(Items.WATER_BUCKET) || pStack.is(Items.BUCKET);
-        } else {
-            return true;
-        }
+//        if (pDirection == Direction.DOWN && pIndex == 1) {
+//            return pStack.is(Items.WATER_BUCKET) || pStack.is(Items.BUCKET);
+//        } else {
+//            return true;
+//        }
+
+        MCCourseMod.LOGGER.info(pStack.toString());
+        MCCourseMod.LOGGER.info(String.valueOf(pIndex));
+        MCCourseMod.LOGGER.info(pDirection.toString());
+
+        return false;
     }
 
     @Override
@@ -362,7 +384,10 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
 
     @Override
     public ItemStack getItem(int i) {
-        return null;
+        CompoundTag tag = new CompoundTag();
+        tag.putString("id", "mccourse:alexandrite");
+        tag.putByte("Count", (byte) 1);
+        return ItemStack.of(tag);
     }
 
     @Override
@@ -381,9 +406,8 @@ public class GemEmpoweringStationBlockEntity extends BlockEntity implements Menu
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        this.getLevel().invalidateCapabilities(this.getBlockPos());
-        return true;
+    public boolean stillValid(Player pPlayer) {
+        return Container.stillValidBlockEntity(this, pPlayer);
     }
 
     @Override
