@@ -22,63 +22,52 @@ import net.minecraft.world.item.ItemStack;
 import net.ramen5914.mccourse.MCCourseMod;
 import net.ramen5914.mccourse.block.ModBlocks;
 import net.ramen5914.mccourse.recipe.GemEmpoweringRecipe;
+import net.ramen5914.mccourse.util.MouseUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class GemEmpoweringRecipeCategory implements IRecipeCategory<GemEmpoweringRecipe> {
     public static final ResourceLocation UID = new ResourceLocation(MCCourseMod.MOD_ID, "gem_empowering");
     public static final ResourceLocation TEXTURE = new ResourceLocation(MCCourseMod.MOD_ID, "textures/gui/container/gem_empowering_station_gui.png");
-    public static final ResourceLocation ARROW = new ResourceLocation(MCCourseMod.MOD_ID, "textures/gui/sprites/container/gem_empowering_station/empowering_progress.png");
-    public static final ResourceLocation ENERGY_BAR = new ResourceLocation(MCCourseMod.MOD_ID, "textures/gui/sprites/container/gem_empowering_station/energy_bar.png");
+
+    private final LoadingCache<Integer, IDrawableAnimated> cachedArrows;
+    private final LoadingCache<Integer, IDrawableAnimated> cachedEnergyBar;
+
 
     public static final RecipeType<GemEmpoweringRecipe> GEM_EMPOWERING_TYPE = new RecipeType<>(UID, GemEmpoweringRecipe.class);
 
     private final IDrawable background;
     private final IDrawable icon;
     private final int regularCookTime = 200;
-    private final LoadingCache<Integer, IDrawableAnimated> cachedArrows;
-    private final LoadingCache<Integer, IDrawableAnimated> cachedEnergyBars;
 
-    public GemEmpoweringRecipeCategory(IGuiHelper helper) {
-        this.background = helper.createDrawable(TEXTURE, 25, 10, 140, 66);
-        this.icon = helper.createDrawableItemStack(new ItemStack(ModBlocks.GEM_EMPOWERING_STATION.get()));
-        this.cachedArrows = CacheBuilder.newBuilder()
-                .maximumSize(25)
-                .build(new CacheLoader<>() {
-                    @Override
-                    public IDrawableAnimated load(Integer cookTime) {
-                        return helper.drawableBuilder(ARROW, 0, 0, 8, 26)
-                                .buildAnimated(cookTime, IDrawableAnimated.StartDirection.TOP, false);
-                    }
-                });
+    public GemEmpoweringRecipeCategory(IGuiHelper pHelper) {
+        this.background = pHelper.createDrawable(TEXTURE, 25, 10, 140, 66);
+        this.icon = pHelper.createDrawableItemStack(new ItemStack(ModBlocks.GEM_EMPOWERING_STATION.get()));
 
-        this.cachedEnergyBars = CacheBuilder.newBuilder()
-                .maximumSize(25)
-                .build(new CacheLoader<>() {
-                    @Override
-                    public IDrawableAnimated load(Integer cookTime) {
-                        int v = Mth.ceil((cookTime * 100f / 64000) * 64);
+        this.cachedArrows = CacheBuilder.newBuilder().maximumSize(25L).build(new CacheLoader<Integer, IDrawableAnimated>() {
+            public IDrawableAnimated load(Integer cookTime) {
+                return pHelper.drawableBuilder(TEXTURE, 176, 0, 8, 26)
+                        .buildAnimated(cookTime, IDrawableAnimated.StartDirection.TOP, false);
+            }
+        });
 
-                        return helper.drawableBuilder(ENERGY_BAR, 0, 64 - v, 8, v)
-                                .buildAnimated(cookTime, IDrawableAnimated.StartDirection.TOP, true);
-                    }
-                });
+        this.cachedEnergyBar = CacheBuilder.newBuilder().maximumSize(25L).build(new CacheLoader<>() {
+            public IDrawableAnimated load(Integer cookTime) {
+                int v = Mth.ceil((cookTime * 50f / 64000) * 64);
+
+                return pHelper.drawableBuilder(TEXTURE, 184, 64 - v, 8, v)
+                        .buildAnimated(cookTime, IDrawableAnimated.StartDirection.TOP, true);
+            }
+        });
     }
 
-    protected IDrawableAnimated getArrow(GemEmpoweringRecipe pRecipe) {
-        int cookTime = pRecipe.getCookingTime();
-        if (cookTime <= 0) {
-            cookTime = regularCookTime;
-        }
+    protected IDrawableAnimated getArrow(int cookTime) {
         return this.cachedArrows.getUnchecked(cookTime);
     }
 
-    private IDrawableAnimated getEnergyBar(GemEmpoweringRecipe pRecipe) {
-        int cookTime = pRecipe.getCookingTime();
-        if (cookTime <= 0) {
-            cookTime = regularCookTime;
-        }
-        return this.cachedEnergyBars.getUnchecked(cookTime);
-    }
+    protected IDrawableAnimated getEnergyBar(int cookTime) {
+        return this.cachedEnergyBar.getUnchecked(cookTime);    }
 
     protected void drawCookTime(GemEmpoweringRecipe pRecipe, GuiGraphics guiGraphics) {
         int cookTime = pRecipe.getCookingTime();
@@ -113,12 +102,17 @@ public class GemEmpoweringRecipeCategory implements IRecipeCategory<GemEmpowerin
 
     @Override
     public void draw(GemEmpoweringRecipe pRecipe, IRecipeSlotsView recipeSlotsView, GuiGraphics pGuiGraphics, double mouseX, double mouseY) {
-        IDrawableAnimated arrow = getArrow(pRecipe);
-        IDrawableAnimated energyBar = getEnergyBar(pRecipe);
+        int cookTime = pRecipe.getCookingTime();
+        if (cookTime <= 0) {
+            cookTime = regularCookTime;
+        }
+
+        IDrawableAnimated arrow = this.getArrow(cookTime);
+        IDrawableAnimated energyBar = this.getEnergyBar(cookTime);
         
         arrow.draw(pGuiGraphics, 60, 20);
 
-        int v = Mth.ceil((pRecipe.getCookingTime() * 100f / 64000) * 64);
+        int v = Mth.ceil((cookTime * 50f / 64000) * 64);
         energyBar.draw(pGuiGraphics, 131, 1 + (64 - v));
 
         drawCookTime(pRecipe, pGuiGraphics);
@@ -127,7 +121,15 @@ public class GemEmpoweringRecipeCategory implements IRecipeCategory<GemEmpowerin
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GemEmpoweringRecipe pRecipe, IFocusGroup iFocusGroup) {
         builder.addSlot(RecipeIngredientRole.INPUT, 55, 1).addIngredients(pRecipe.getIngredient());
-
         builder.addSlot(RecipeIngredientRole.OUTPUT, 55, 49).addItemStack(pRecipe.getResultItem());
+    }
+
+    @Override
+    public List<Component> getTooltipStrings(GemEmpoweringRecipe pRecipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
+        if (MouseUtil.isMouseOver(mouseX, mouseY, 131, 1, 8, 64)) {
+            return List.of(Component.literal(String.format("%s FE Required", pRecipe.getCookingTime() * 50)));
+        }
+
+        return IRecipeCategory.super.getTooltipStrings(pRecipe, recipeSlotsView, mouseX, mouseY);
     }
 }
