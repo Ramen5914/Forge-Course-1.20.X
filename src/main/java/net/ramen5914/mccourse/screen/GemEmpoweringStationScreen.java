@@ -17,8 +17,6 @@ import java.util.Optional;
 
 public class GemEmpoweringStationScreen extends AbstractContainerScreen<GemEmpoweringStationMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(MCCourseMod.MOD_ID, "textures/gui/container/gem_empowering_station_gui.png");
-    private static final ResourceLocation ENERGY_BAR_SPRITE = new ResourceLocation(MCCourseMod.MOD_ID, "container/gem_empowering_station/energy_bar");
-    private static final ResourceLocation EMPOWERING_PROGRESS_SPRITE = new ResourceLocation(MCCourseMod.MOD_ID, "container/gem_empowering_station/empowering_progress");
     private final GemEmpoweringStationBlockEntity blockEntity = menu.blockEntity;
 
     public GemEmpoweringStationScreen(GemEmpoweringStationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -63,16 +61,15 @@ public class GemEmpoweringStationScreen extends AbstractContainerScreen<GemEmpow
 
     private void renderEnergyBar(GuiGraphics pGuiGraphics, int x, int y) {
         if (blockEntity.getEnergyStorage().getEnergyStored() > 0) {
-            // int l = Mth.ceil(menu.getEnergyLevel() * 64f) + 1;
             int l = Mth.ceil(menu.getEnergyLevel() * 64f);
-            pGuiGraphics.blitSprite(ENERGY_BAR_SPRITE, 8, 64, 0, 64 - l, x + 156, y + 75 - l, 8, l);
+            pGuiGraphics.blit(TEXTURE, x + 156, y + 75 - l, 184, 64-l, 8, l);
         }
     }
 
     private void renderProgressArrow(GuiGraphics pGuiGraphics, int x, int y) {
         if (menu.isCrafting()) {
             int pixelsToRender = Mth.ceil(menu.getEmpoweringProgress() * 26f);
-            pGuiGraphics.blitSprite(EMPOWERING_PROGRESS_SPRITE, 8, 26, 0, 0, x + 85, y + 30, 8, pixelsToRender);
+            pGuiGraphics.blit(TEXTURE, x + 85, y + 30, 176, 0, 8, pixelsToRender);
         }
     }
 
