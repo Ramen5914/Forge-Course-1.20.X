@@ -22,11 +22,5 @@ public class ModEventModBusEvents {
                 ModBlockEntities.GEM_EMPOWERING_STATION_BE_TYPE.get(),
                 (be, side) -> be.getEnergyStorage()
         );
-
-//        event.registerBlockEntity(
-//                Capabilities.ItemHandler.ENTITY_AUTOMATION,
-//                ModBlockEntities.GEM_EMPOWERING_STATION_BE_TYPE.get(),
-//                (be, side) -> be.g;
-//        );
     }
 }
