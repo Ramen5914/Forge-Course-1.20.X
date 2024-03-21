@@ -34,3 +34,4 @@ forge*changelog.txt
 /runs/data/logs
 runs/client/usernamecache.json
 runs/client/usercache.json
+runs/client/command_history.txt
