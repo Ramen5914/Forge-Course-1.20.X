@@ -28,7 +28,7 @@ updateJSONURL="${github_link}/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="${github_link}" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-#logoFile="examplemod.png" #optional
+logoFile="mccoursemod.png" #optional
 # A text field displayed in the mod UI
 #credits="" #optional
 # A text field displayed in the mod UI

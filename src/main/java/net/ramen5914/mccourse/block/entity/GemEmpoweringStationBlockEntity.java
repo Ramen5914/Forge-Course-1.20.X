@@ -322,6 +322,8 @@ public class GemEmpoweringStationBlockEntity extends BaseContainerBlockEntity im
 
     @Override
     public int[] getSlotsForFace(Direction pSide) {
+        MCCourseMod.LOGGER.info(pSide.toString());
+
         if (pSide == Direction.DOWN) {
             return new int[]{OUTPUT_SLOT};
         } else if (pSide == Direction.WEST) {
@@ -354,7 +356,11 @@ public class GemEmpoweringStationBlockEntity extends BaseContainerBlockEntity im
 ////            return CommonHooks.getBurnTime(pStack, this.recipeType) > 0 || pStack.is(Items.BUCKET) && !itemstack.is(Items.BUCKET);
 //        }
 
-        return false;
+        if (pIndex == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
